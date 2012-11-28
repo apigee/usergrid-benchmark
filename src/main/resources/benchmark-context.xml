@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:hz="http://www.hazelcast.com/schema/spring"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/jee
+		http://www.springframework.org/schema/jee/spring-jee-3.1.xsd
+		http://www.springframework.org/schema/lang
+		http://www.springframework.org/schema/lang/spring-lang-3.1.xsd
+		http://www.springframework.org/schema/task
+		http://www.springframework.org/schema/task/spring-task-3.1.xsd
+		http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util-3.1.xsd
+		http://www.hazelcast.com/schema/spring
+		http://www.hazelcast.com/schema/spring/hazelcast-spring-2.4.xsd">
+
+	
+ <bean id="properties"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="singleton" value="true" />
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="locations">
+			<list>
+				<value>classpath:/benchmark-default.properties</value>
+				<value>file:./benchmark.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="propertyPlaceholderConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="properties" ref="properties" />
+		<property name="systemPropertiesModeName">
+			<value>SYSTEM_PROPERTIES_MODE_OVERRIDE</value>
+		</property>
+	</bean>
+
+	<import resource="classpath:/usergrid-event-context.xml"/>
+	
+	<hz:hazelcast id="hazelcastInstance">
+   	<hz:config>
+   	<!-- 	<hz:wan-replication name="foo">
+   		<hz:target-cluster group-password="foo" group-name="bar">
+   			<hz:replication-impl>com.hazelcast.impl.wan.WanNoDelayReplication</hz:replication-impl>
+   			<hz:end-points><hz:address>10.0.1.4:5701</hz:address></hz:end-points>
+   		
+   		</hz:target-cluster>
+   	</hz:wan-replication>  -->
+   		<hz:network port="5701" port-auto-increment="true">
+   			<hz:join>
+   				<hz:multicast enabled="false"/>
+   				
+   				<hz:tcp-ip enabled="true">
+   				
+   					<hz:members>${HZ_MEMBERS}</hz:members>
+   					
+   				</hz:tcp-ip>
+   			</hz:join>
+   			
+   		</hz:network>
+   
+   	</hz:config>
+   	
+   </hz:hazelcast>
+</beans>
