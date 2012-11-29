@@ -6,13 +6,13 @@
 			<param value="%d %p (%t) [%c] - %m%n" name="ConversionPattern" />
 		</layout>
 	</appender>
-	<appender name="writeAppender" class="org.apache.log4j.FileAppender">
+	<appender name="writeAppender" class="org.usergrid.log4j.HostAwareFileAppender">
 		<param name="file" value="write.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param value="%m%n" name="ConversionPattern" />
 		</layout>
 	</appender>
-	<appender name="readAppender" class="org.apache.log4j.FileAppender">
+	<appender name="readAppender" class="org.usergrid.log4j.HostAwareFileAppender">
 		<param name="file" value="read.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param value="%m%n" name="ConversionPattern" />
