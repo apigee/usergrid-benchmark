@@ -16,6 +16,7 @@
 package org.usergrid.benchmark.commands;
 
 import java.net.InetAddress;
+import java.util.concurrent.Semaphore;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
@@ -58,13 +59,15 @@ public abstract class EventServiceTestBase extends ToolBase {
 
     Option count = OptionBuilder.withArgName("count").hasArg().isRequired(true)
         .withDescription("Max count of messages to send").create("count");
-
-   
+    
+    Option wait = OptionBuilder.withArgName("wait").hasArg(false).isRequired(false)
+        .withDescription("Max count of messages to send").create("wait");   
 
     Options options = new Options();
     options.addOption(hostOption);
     options.addOption(workers);
     options.addOption(count);
+    options.addOption(wait);
 
     return options;
   }
@@ -92,6 +95,11 @@ public abstract class EventServiceTestBase extends ToolBase {
     logger.info("Starting workers");
 
     doWork(line, hostName, workers, count);
+    
+    //wait until the user pressed CTRL +C
+    if(line.hasOption("wait")){
+      new Semaphore(0).acquire();
+    }
   }
   
   protected void writeTimerData(final Timer t){
