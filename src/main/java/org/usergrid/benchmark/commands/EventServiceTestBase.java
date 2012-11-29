@@ -25,8 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.usergrid.event.EventService;
-import org.usergrid.event.Topic;
-import org.usergrid.tools.event.TestEvent;
 
 import com.yammer.metrics.Metrics;
 import com.yammer.metrics.core.Metric;
@@ -39,14 +37,14 @@ import com.yammer.metrics.reporting.ConsoleReporter;
  * @author tnine
  * 
  */
-public abstract class TopicBase extends ToolBase {
+public abstract class EventServiceTestBase extends ToolBase {
 
-  protected static final Logger logger = LoggerFactory.getLogger(TopicBase.class);
+  protected static final Logger logger = LoggerFactory.getLogger(EventServiceTestBase.class);
 
   
 
   @Autowired
-  private EventService eventService;
+  protected EventService eventService;
 
   @Override
   @SuppressWarnings("static-access")
@@ -58,10 +56,6 @@ public abstract class TopicBase extends ToolBase {
     Option workers = OptionBuilder.withArgName("workers").hasArg().isRequired(true).withDescription("Max workers")
         .create("workers");
 
-    Option topicName = OptionBuilder.withArgName("topic").hasArg().isRequired(true)
-        .withDescription("The name of the topic to use").create("topic");
-    
-
     Option count = OptionBuilder.withArgName("count").hasArg().isRequired(true)
         .withDescription("Max count of messages to send").create("count");
 
@@ -69,7 +63,6 @@ public abstract class TopicBase extends ToolBase {
 
     Options options = new Options();
     options.addOption(hostOption);
-    options.addOption(topicName);
     options.addOption(workers);
     options.addOption(count);
 
@@ -89,10 +82,6 @@ public abstract class TopicBase extends ToolBase {
 
     startSpring();
 
-    String topicName = line.getOptionValue("topic");
-
-    Topic<TestEvent> testTopic = eventService.getTopic(topicName);
-
     int workers = Integer.parseInt(line.getOptionValue("workers"));
 
     String hostName = InetAddress.getLocalHost().getHostName();
@@ -102,7 +91,7 @@ public abstract class TopicBase extends ToolBase {
 
     logger.info("Starting workers");
 
-    doWork(line, testTopic, hostName, workers, count);
+    doWork(line, hostName, workers, count);
   }
   
   protected void writeTimerData(final Timer t){
@@ -124,7 +113,7 @@ public abstract class TopicBase extends ToolBase {
    * @param workers
    * @throws Exception
    */
-  protected abstract void doWork(CommandLine line, Topic<TestEvent> topic, String hostName, int workers, int count)
+  protected abstract void doWork(CommandLine line, String hostName, int workers, int count)
       throws Exception;
 
 }

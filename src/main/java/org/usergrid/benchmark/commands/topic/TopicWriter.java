@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package org.usergrid.benchmark.commands;
+package org.usergrid.benchmark.commands.topic;
 
 import java.util.ArrayList;
 import java.util.List;

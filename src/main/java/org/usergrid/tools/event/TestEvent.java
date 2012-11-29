@@ -15,15 +15,14 @@
  ******************************************************************************/
 package org.usergrid.tools.event;
 
-import java.io.Serializable;
-
 import org.slf4j.Logger;
+import org.usergrid.event.EventEntry;
 
 /**
  * @author tnine
  *
  */
-public class TestEvent implements Serializable {
+public class TestEvent implements EventEntry {
 
   /**
    * 
@@ -70,8 +69,51 @@ public class TestEvent implements Serializable {
   }
 
 
+  /* (non-Javadoc)
+   * @see java.lang.Object#hashCode()
+   */
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + entryId;
+    result = prime * result + ((hostName == null) ? 0 : hostName.hashCode());
+    result = prime * result + workerId;
+    return result;
+  }
+
+
+  /* (non-Javadoc)
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    TestEvent other = (TestEvent) obj;
+    if (entryId != other.entryId)
+      return false;
+    if (hostName == null) {
+      if (other.hostName != null)
+        return false;
+    } else if (!hostName.equals(other.hostName))
+      return false;
+    if (workerId != other.workerId)
+      return false;
+    return true;
+  }
+
+
   public void logEvent(Logger logger){
     logger.info("{}-{}-{}", new Object[] { hostName, workerId, entryId });
+  }
+  
+  public String toString(){
+    return String.format("%s-%s-%s", new Object[] { hostName, workerId, entryId });
   }
   
   

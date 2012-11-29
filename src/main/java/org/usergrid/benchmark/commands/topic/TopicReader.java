@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package org.usergrid.benchmark.commands;
+package org.usergrid.benchmark.commands.topic;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -21,9 +21,9 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.cli.CommandLine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.usergrid.event.EntryListener;
 import org.usergrid.event.Topic;
 import org.usergrid.tools.event.TestEvent;
+import org.usergrid.tools.event.TopicListener;
 
 import com.yammer.metrics.Metrics;
 import com.yammer.metrics.core.Timer;
@@ -52,7 +52,7 @@ public class TopicReader extends TopicBase {
 
     CountDownLatch latch  = new CountDownLatch(count*workers);
     
-    topic.subscribe(new TopicListener(latch));
+    topic.subscribe(new TopicListener(latch, readsTimer, readLogger));
     
     latch.await();
     
@@ -60,25 +60,4 @@ public class TopicReader extends TopicBase {
 
   }
 
-  private class TopicListener implements EntryListener<TestEvent> {
-
-    private CountDownLatch latch;
-    
-    private TopicListener(CountDownLatch latch){
-      this.latch = latch;
-    }
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.usergrid.event.EntryListener#onMessage(java.io.Serializable)
-     */
-    @Override
-    public void onMessage(TestEvent message) {
-      message.logEvent(readLogger);
-      //not a true op, so just click the timer
-      readsTimer.time().stop();
-      latch.countDown();
-    }
-
-  }
 }
