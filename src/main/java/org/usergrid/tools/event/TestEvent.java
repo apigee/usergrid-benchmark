@@ -109,11 +109,11 @@ public class TestEvent implements EventEntry {
 
 
   public void logEvent(Logger logger){
-    logger.info("{}-{}-{}", new Object[] { hostName, workerId, entryId });
+    logger.info(toString());
   }
   
   public String toString(){
-    return String.format("%s-%s-%s", new Object[] { hostName, workerId, entryId });
+    return String.format("%s-%03d-%08d", new Object[] { hostName, workerId, entryId });
   }
   
   

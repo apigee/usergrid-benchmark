@@ -8,16 +8,16 @@ import org.usergrid.event.EntryListener;
 
 import com.yammer.metrics.core.Timer;
 
-public class TopicListener implements EntryListener<TestEvent> {
+public class EventListener implements EntryListener<TestEvent> {
   
-  private static final Logger logger = LoggerFactory.getLogger(TopicListener.class);
+  private static final Logger logger = LoggerFactory.getLogger(EventListener.class);
   
   private CountDownLatch latch;
   private Timer readsTimer;
   private Logger readLogger;
   
   
-  public TopicListener(CountDownLatch latch, Timer readsTimer, Logger readLogger){
+  public EventListener(CountDownLatch latch, Timer readsTimer, Logger readLogger){
     this.latch = latch;
     this.readsTimer = readsTimer;
     this.readLogger = readLogger;

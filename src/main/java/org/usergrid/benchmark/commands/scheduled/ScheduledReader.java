@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.usergrid.event.ScheduledQueue;
 import org.usergrid.tools.event.TestEvent;
-import org.usergrid.tools.event.TopicListener;
+import org.usergrid.tools.event.EventListener;
 
 import com.yammer.metrics.Metrics;
 import com.yammer.metrics.core.Timer;
@@ -52,7 +52,7 @@ public class ScheduledReader extends ScheduledBase {
 
     CountDownLatch latch  = new CountDownLatch(count*workers);
     
-    queue.observe(new TopicListener(latch, readsTimer, readLogger));
+    queue.observe(new EventListener(latch, readsTimer, readLogger));
     
     latch.await();
     
