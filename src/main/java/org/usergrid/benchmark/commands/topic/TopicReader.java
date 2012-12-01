@@ -52,7 +52,7 @@ public class TopicReader extends TopicBase {
 
     CountDownLatch latch  = new CountDownLatch(count*workers);
     
-    topic.subscribe(new EventListener(latch, readsTimer, readLogger));
+    topic.subscribe(new EventListener(latch, readsTimer, readLogger, null));
     
     latch.await();
     

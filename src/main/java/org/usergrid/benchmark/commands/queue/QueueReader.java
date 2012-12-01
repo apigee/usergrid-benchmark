@@ -52,7 +52,7 @@ public class QueueReader extends QueueBase {
 
     CountDownLatch latch  = new CountDownLatch(count*workers);
     
-    queue.observe(new EventListener(latch, readsTimer, readLogger));
+    queue.observe(new EventListener(latch, readsTimer, readLogger, queue));
     
     latch.await();
     

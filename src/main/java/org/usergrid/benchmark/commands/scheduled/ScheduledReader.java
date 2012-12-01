@@ -52,7 +52,7 @@ public class ScheduledReader extends ScheduledBase {
 
     CountDownLatch latch  = new CountDownLatch(count*workers);
     
-    queue.observe(new EventListener(latch, readsTimer, readLogger));
+    queue.observe(new EventListener(latch, readsTimer, readLogger, queue));
     
     latch.await();
     
