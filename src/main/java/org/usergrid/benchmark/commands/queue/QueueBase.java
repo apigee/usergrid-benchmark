@@ -22,7 +22,7 @@ import org.apache.commons.cli.Options;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.usergrid.benchmark.commands.EventServiceTestBase;
-import org.usergrid.event.ScheduledQueue;
+import org.usergrid.event.Queue;
 import org.usergrid.tools.event.TestEvent;
 
 /**
@@ -62,7 +62,7 @@ public abstract class QueueBase extends EventServiceTestBase {
    
     String queueName = line.getOptionValue("queue");
 
-    ScheduledQueue<TestEvent> event = eventService.getScheduledQueue(queueName);
+    Queue<TestEvent> event = eventService.getQueue(queueName);
     
 
     doWork(line, event, hostName, workers, count);
@@ -78,7 +78,7 @@ public abstract class QueueBase extends EventServiceTestBase {
    * @param count
    * @throws Exception
    */
-  protected abstract void doWork(CommandLine line, ScheduledQueue<TestEvent> queue, String hostName, int workers, int count)
+  protected abstract void doWork(CommandLine line, Queue<TestEvent> queue, String hostName, int workers, int count)
       throws Exception;
 
 }

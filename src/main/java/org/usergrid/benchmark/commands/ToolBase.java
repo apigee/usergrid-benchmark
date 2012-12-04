@@ -84,7 +84,7 @@ public abstract class ToolBase {
 
 		AutowireCapableBeanFactory acbf = ac.getAutowireCapableBeanFactory();
 		acbf.autowireBeanProperties(this,
-				AutowireCapableBeanFactory.AUTOWIRE_BY_NAME, false);
+				AutowireCapableBeanFactory.AUTOWIRE_NO, false);
 		acbf.initializeBean(this, "tool");
 
 	}

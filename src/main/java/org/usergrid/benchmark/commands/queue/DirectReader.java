@@ -38,11 +38,11 @@ import com.yammer.metrics.core.Timer;
  * @author tnine
  * 
  */
-public class QueueReader extends QueueBase {
+public class DirectReader extends QueueBase {
 
   protected static final Logger readLogger = LoggerFactory.getLogger("read");
 
-  protected static final Timer readsTimer = Metrics.newTimer(QueueReader.class, "reads", TimeUnit.MILLISECONDS,
+  protected static final Timer readsTimer = Metrics.newTimer(DirectReader.class, "reads", TimeUnit.MILLISECONDS,
       TimeUnit.SECONDS);
 
   
@@ -61,8 +61,19 @@ public class QueueReader extends QueueBase {
 
     CountDownLatch latch = new CountDownLatch(count * workers);
     
-    queue.observe(new EventListener(latch, readsTimer, readLogger, queue));
+//     queue.observe(new EventListener(latch, readsTimer, readLogger, queue));
     
+    
+    
+    EventListener listener = new EventListener(latch, readsTimer, readLogger, queue);
+    
+    IQueue<TestEvent> hzQueue = instance.getQueue(line.getOptionValue("queue"));
+    
+    while(latch.getCount() != 0){
+      
+      listener.onMessage(hzQueue.take());
+    }
+        
     latch.await();
 
     writeTimerData(readsTimer);

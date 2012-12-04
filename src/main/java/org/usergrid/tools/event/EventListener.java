@@ -23,6 +23,7 @@ public class EventListener implements EntryListener<TestEvent> {
     this.latch = latch;
     this.readsTimer = readsTimer;
     this.readLogger = readLogger;
+    this.listener = listener;
   }
   /*
    * (non-Javadoc)

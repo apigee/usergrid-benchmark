@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.cli.CommandLine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.usergrid.event.ScheduledQueue;
+import org.usergrid.event.Queue;
 import org.usergrid.tools.event.TestEvent;
 
 import com.yammer.metrics.Metrics;
@@ -53,7 +53,7 @@ public class QueueWriter extends QueueBase {
    * java.lang.String, int)
    */
   @Override
-  protected void doWork(CommandLine line, ScheduledQueue<TestEvent> queue, String hostName, int workers, int count)
+  protected void doWork(CommandLine line, Queue<TestEvent> queue, String hostName, int workers, int count)
       throws Exception {
     ExecutorService executor = Executors.newFixedThreadPool(workers);
 
@@ -79,7 +79,7 @@ public class QueueWriter extends QueueBase {
 
   private class QueueWorker implements Callable<Void> {
 
-    private ScheduledQueue<TestEvent> queue;
+    private Queue<TestEvent> queue;
     private String hostName;
     private int threadIndex;
     private int count;
@@ -90,7 +90,7 @@ public class QueueWriter extends QueueBase {
      * @param threadNum
      * @param index
      */
-    public QueueWorker(ScheduledQueue<TestEvent> queue, String hostName, int threadIndex, int count) {
+    public QueueWorker(Queue<TestEvent> queue, String hostName, int threadIndex, int count) {
       this.queue = queue;
       this.hostName = hostName;
       this.threadIndex = threadIndex;
@@ -110,7 +110,7 @@ public class QueueWriter extends QueueBase {
         event.logEvent(writeLogger);
        
         TimerContext timer = writesTimer.time();
-        queue.schedule((long)(2000*Math.random()), TimeUnit.MILLISECONDS, event);
+        queue.add(event);
         timer.stop();
       }
 
